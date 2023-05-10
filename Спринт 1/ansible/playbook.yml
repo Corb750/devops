@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - docker
+          - docker-compose
+          - git
+          # Другие необходимые пакеты
+
+    - name: Configure Docker
+      copy:
+        src: docker_daemon.json
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    # Другие задачи настройки и установки
+
+- hosts: kubernetes-master
+  become: true
+  tasks:
+    # Задачи специфичные для Kubernetes мастера
+
+- hosts: kubernetes-app
+  become: true
+  tasks:
+    # Задачи специфичные для Kubernetes приложения
+
+- hosts: service
+  become: true
+  tasks:
+    # Задачи специфичные для служебного сервера

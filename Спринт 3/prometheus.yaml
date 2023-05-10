@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+spec:
+  replicas: 1
+  version: v2.27.1
+  serviceAccountName: prometheus
+  securityContext:
+    fsGroup: 2000
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: standard
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+  alerting:
+    alertmanagers:
+      - namespace: monitoring
+        name: alertmanager-main
+        port: web
+  ruleSelector:
+    matchLabels:
+      role: prometheus
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - server
+  serviceMonitorSelector:
+    matchLabels:
+      role: prometheus
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - server
+  resources:
+    requests:
+      memory: 400Mi

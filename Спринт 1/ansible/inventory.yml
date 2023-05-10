@@ -1,0 +1,9 @@
+all:
+  children:
+    kubernetes:
+      hosts:
+        kubernetes-master:
+        kubernetes-app:
+    service:
+      hosts:
+        service-server:

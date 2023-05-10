@@ -1,0 +1,11 @@
+image:
+  repository: registry.example.com/namespace/app
+  tag: 2.0.3
+
+service:
+  port: 80
+
+postgresql:
+  enabled: true
+  postgresUser: myuser
+  postgresPassword: mypassword
